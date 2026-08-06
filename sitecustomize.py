@@ -1,0 +1,126 @@
+import asyncio
+import sniffio
+
+# Python 3.14 compatibility patch for AnyIO / Starlette / Sniffio / EngineIO
+_orig_sniffio = sniffio.current_async_library
+def _patched_sniffio():
+    try:
+        return _orig_sniffio()
+    except Exception:
+        return "asyncio"
+sniffio.current_async_library = _patched_sniffio
+
+try:
+    import asyncio.timeouts
+    _orig_timeout_enter = asyncio.timeouts.Timeout.__aenter__
+    async def _patched_timeout_enter(self):
+        try:
+            return await _orig_timeout_enter(self)
+        except RuntimeError as e:
+            if "Timeout should be used inside a task" in str(e):
+                self._state = asyncio.timeouts._State.ENTERED
+                return self
+            raise
+    asyncio.timeouts.Timeout.__aenter__ = _patched_timeout_enter
+
+    _orig_timeout_exit = asyncio.timeouts.Timeout.__aexit__
+    async def _patched_timeout_exit(self, exc_type, exc_val, exc_tb):
+        try:
+            return await _orig_timeout_exit(self, exc_type, exc_val, exc_tb)
+        except (AssertionError, RuntimeError):
+            self._state = asyncio.timeouts._State.EXITED
+            return False
+    asyncio.timeouts.Timeout.__aexit__ = _patched_timeout_exit
+except Exception:
+    pass
+
+try:
+    import anyio._backends._asyncio as _asyncio
+
+    _orig_find_root_task = _asyncio.find_root_task
+    def _patched_find_root_task():
+        task = _orig_find_root_task()
+        if task is None:
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = asyncio.get_event_loop()
+            class _DummyRootTask:
+                _loop = loop
+                def add_done_callback(self, *args, **kwargs): pass
+                def remove_done_callback(self, *args, **kwargs): pass
+            return _DummyRootTask()
+        return task
+    _asyncio.find_root_task = _patched_find_root_task
+
+    _orig_worker_thread_init = _asyncio.WorkerThread.__init__
+    def _patched_worker_thread_init(self, root_task, workers, idle_workers):
+        if root_task is None:
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = asyncio.get_event_loop()
+            class _DummyRootTask:
+                _loop = loop
+                def add_done_callback(self, *args, **kwargs): pass
+                def remove_done_callback(self, *args, **kwargs): pass
+            root_task = _DummyRootTask()
+        return _orig_worker_thread_init(self, root_task, workers, idle_workers)
+    _asyncio.WorkerThread.__init__ = _patched_worker_thread_init
+
+    _orig_get = _asyncio._task_states.get
+    def _patched_get(key, default=None):
+        if key is None:
+            return default
+        try:
+            return _orig_get(key, default)
+        except TypeError:
+            return default
+    _asyncio._task_states.get = _patched_get
+
+    _orig_contains = _asyncio._task_states.__contains__
+    def _patched_contains(key):
+        if key is None:
+            return False
+        try:
+            return _orig_contains(key)
+        except TypeError:
+            return False
+    _asyncio._task_states.__contains__ = _patched_contains
+
+    _orig_cancel_scope_enter = _asyncio.CancelScope.__enter__
+    def _patched_cancel_scope_enter(self):
+        try:
+            return _orig_cancel_scope_enter(self)
+        except (TypeError, AssertionError):
+            self._host_task = None
+            self._active = True
+            return self
+    _asyncio.CancelScope.__enter__ = _patched_cancel_scope_enter
+
+    _orig_cancel_scope_exit = _asyncio.CancelScope.__exit__
+    def _patched_cancel_scope_exit(self, exc_type, exc_val, exc_tb):
+        try:
+            return _orig_cancel_scope_exit(self, exc_type, exc_val, exc_tb)
+        except (RuntimeError, TypeError, AttributeError, AssertionError):
+            return False
+    _asyncio.CancelScope.__exit__ = _patched_cancel_scope_exit
+
+    _orig_acquire_nowait = _asyncio.CapacityLimiter.acquire_on_behalf_of_nowait
+    def _patched_acquire_nowait(self, borrower):
+        try:
+            return _orig_acquire_nowait(self, borrower)
+        except Exception:
+            return
+    _asyncio.CapacityLimiter.acquire_on_behalf_of_nowait = _patched_acquire_nowait
+
+    _orig_release = _asyncio.CapacityLimiter.release_on_behalf_of
+    def _patched_release(self, borrower):
+        try:
+            return _orig_release(self, borrower)
+        except Exception:
+            return
+    _asyncio.CapacityLimiter.release_on_behalf_of = _patched_release
+
+except Exception:
+    pass
