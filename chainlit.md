@@ -1,14 +1,20 @@
-# Welcome to Chainlit! 🚀🤖
+# ✨ Welcome to Gemini AI Studio
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+> 🟢 **Gemini 2.0 Flash Active** | 🎨 **Imagen 3.0 Engine Ready** | 📐 **Flexible Aspect Ratios (1:1 / 16:9)**
 
-## Useful Links 🔗
+---
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+### 🌟 Studio Capabilities
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+- 💬 **Smart Conversational AI**: Engage in natural conversations, generate high-quality code, analyze data, and solve complex queries in real-time.
+- 🖼️ **Imagen 3 Image Generation**: Create stunning photorealistic digital artwork instantly by typing `/image <prompt>`.
+- ⚡ **Instant Token Streaming**: Experience real-time streaming responses with low latency.
+- 🎨 **Aspect Ratio Controls**: Toggle between `1:1 Square` and `16:9 Widescreen` canvas modes for generated artwork.
 
-## Welcome screen
+---
 
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+### 💡 Quick Prompt Commands
+
+- **Generate Artwork:** Type `/image A majestic neon-lit cyberpunk city in 8k resolution`
+- **Draw Concept Art:** Type `/draw Sci-fi space station orbiting Saturn with vibrant nebula`
+- **Preset Buttons:** Click any preset action button below to launch an instant prompt!

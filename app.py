@@ -134,9 +134,10 @@ load_dotenv()
 
 # Preset prompt dictionary for clean action routing
 PRESETS = {
-    "preset_cyberpunk": "A futuristic cyberpunk city skyline with neon lights at night",
-    "preset_robot": "A high-tech friendly AI robot helper rendering in 3D octane style",
-    "preset_sunset": "A serene watercolor landscape painting of mountains during sunset",
+    "preset_cyberpunk": "A futuristic cyberpunk city skyline with neon lights at night, 8k resolution octane render",
+    "preset_robot": "A high-tech friendly AI robot helper with glowing cyan eyes, 3D render",
+    "preset_sunset": "A serene watercolor landscape painting of majestic mountains during golden hour sunset",
+    "preset_nebula": "An epic cosmic nebula with shimmering stars and distant glowing planets in deep space",
 }
 
 
@@ -147,19 +148,20 @@ async def start():
     try:
         service = GeminiService()
         cl.user_session.set("service", service)
-        status = "✅ **Gemini API Connected**"
+        status = "🟢 **Connected to Gemini 2.0 Flash & Imagen 3**"
     except ValueError as err:
         cl.user_session.set("service", None)
-        status = f"⚠️ **Configuration Warning**: {err}"
+        status = f"⚠️ **API Key Missing**: {err}"
 
     actions = [
-        cl.Action(name="preset_cyberpunk", payload={"value": "cyberpunk"}, label="🌆 Cyberpunk"),
-        cl.Action(name="preset_robot", payload={"value": "robot"}, label="🤖 AI Robot"),
-        cl.Action(name="preset_sunset", payload={"value": "sunset"}, label="🎨 Sunset"),
-        cl.Action(name="toggle_aspect", payload={"value": "toggle"}, label="📐 Toggle Aspect (1:1 / 16:9)"),
+        cl.Action(name="preset_cyberpunk", payload={"value": "cyberpunk"}, label="🌆 Cyberpunk City"),
+        cl.Action(name="preset_robot", payload={"value": "robot"}, label="🤖 3D AI Robot"),
+        cl.Action(name="preset_sunset", payload={"value": "sunset"}, label="🎨 Sunset Watercolor"),
+        cl.Action(name="preset_nebula", payload={"value": "nebula"}, label="🌌 Cosmic Nebula"),
+        cl.Action(name="toggle_aspect", payload={"value": "toggle"}, label="📐 Toggle Aspect Ratio (1:1 / 16:9)"),
     ]
     await cl.Message(
-        content=f"# 🚀 Gemini AI Assistant & Image Generator\n\n{status}\n\nChat naturally or type `/image <prompt>` to generate artwork!",
+        content=f"### 🚀 Gemini AI Studio Initialized\n\n> {status}\n\nSelect a preset below, chat naturally, or type `/image <prompt>` to generate artwork!",
         actions=actions
     ).send()
 
@@ -167,6 +169,7 @@ async def start():
 @cl.action_callback("preset_cyberpunk")
 @cl.action_callback("preset_robot")
 @cl.action_callback("preset_sunset")
+@cl.action_callback("preset_nebula")
 async def handle_preset(action: cl.Action):
     """Handle click events for preset image prompts."""
     prompt = PRESETS.get(action.name)
@@ -180,7 +183,9 @@ async def toggle_aspect(action: cl.Action):
     current = cl.user_session.get("aspect_ratio", "1:1")
     new_ratio = "16:9" if current == "1:1" else "1:1"
     cl.user_session.set("aspect_ratio", new_ratio)
-    await cl.Message(content=f"📐 **Aspect Ratio set to `{new_ratio}`** for future images.").send()
+    await cl.Message(
+        content=f"📐 **Canvas Aspect Ratio updated to** `{new_ratio}`"
+    ).send()
 
 
 async def generate_image_ui(prompt: str):
@@ -190,13 +195,17 @@ async def generate_image_ui(prompt: str):
         return await cl.Message(content="⚠️ Please configure `GEMINI_API_KEY` in `.env`.").send()
 
     aspect_ratio = cl.user_session.get("aspect_ratio", "1:1")
-    async with cl.Step(name="Imagen 3 Engine", type="tool") as step:
-        step.input = f"Prompt: '{prompt}' ({aspect_ratio})"
+    async with cl.Step(name="Imagen 3 Studio", type="tool") as step:
+        step.input = f"Prompt: '{prompt}' | Aspect: {aspect_ratio}"
         try:
             image_bytes = await service.generate_image(prompt, aspect_ratio)
-            img = cl.Image(content=image_bytes, name="generated.jpg", display="inline")
-            step.output = "Image generated successfully."
-            await cl.Message(content=f"✨ **Generated:** *\"{prompt}\"*", elements=[img]).send()
+            img = cl.Image(content=image_bytes, name="generated_artwork.jpg", display="inline")
+            step.output = "✨ Image rendered successfully via Imagen 3."
+            
+            await cl.Message(
+                content=f"🎨 **Generated Artwork** • `{aspect_ratio}`\n\n*\"{prompt}\"*", 
+                elements=[img]
+            ).send()
         except Exception as e:
             step.output = f"Error: {e}"
             await cl.Message(content=f"❌ **Image Generation Failed:** {e}").send()
@@ -226,3 +235,4 @@ async def on_message(msg: cl.Message):
         await response.update()
     except Exception as e:
         await cl.Message(content=f"❌ **Chat Error:** {e}").send()
+

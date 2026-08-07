@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Gemini AI Studio - Ultra-Modern Custom CSS for Chainlit
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  --bg-dark-base: #090d16;
+  --bg-dark-surface: rgba(15, 23, 42, 0.85);
+  --bg-glass-card: rgba(30, 41, 59, 0.55);
+  
+  --accent-primary: #6366f1;
+  --accent-secondary: #a855f7;
+  --accent-cyan: #06b6d4;
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+  --accent-glow: rgba(99, 102, 241, 0.3);
+  
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --border-glass-bright: rgba(255, 255, 255, 0.2);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+}
+
+/* Global Font & Body Theme */
+body, html, #root {
+  font-family: var(--font-primary) !important;
+  background-color: var(--bg-dark-base) !important;
+  color: var(--text-main) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading) !important;
+  letter-spacing: -0.02em;
+}
+
+/* Background Glowing Mesh Accent */
+body::before {
+  content: '';
+  position: fixed;
+  top: -15%;
+  left: 20%;
+  width: 650px;
+  height: 650px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(70px);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 0%;
+  right: 15%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(70px);
+}
+
+/* Header Navbar Styling */
+header, .header-container, [role="banner"], div[class*="MuiAppBar"] {
+  background: var(--bg-dark-surface) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border-bottom: 1px solid var(--border-glass) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Header Title */
+header h1, header .title, [class*="MuiTypography-h6"] {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  background: var(--accent-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Action Buttons (Presets & Toggles) */
+button,
+.cl-action-button,
+div[role="group"] button,
+button[class*="MuiButton"],
+button[class*="MuiButtonBase"] {
+  border-radius: 12px !important;
+  font-family: var(--font-primary) !important;
+  font-weight: 600 !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: rgba(30, 41, 59, 0.7) !important;
+  border: 1px solid var(--border-glass-bright) !important;
+  color: var(--text-main) !important;
+  backdrop-filter: blur(8px) !important;
+  padding: 8px 16px !important;
+  margin: 4px !important;
+}
+
+button:hover,
+.cl-action-button:hover,
+div[role="group"] button:hover,
+button[class*="MuiButton"]:hover {
+  background: var(--accent-gradient) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--accent-glow) !important;
+}
+
+/* Message Bubbles & Row Styling */
+div[role="row"], div[class*="message-"], div[class*="Step-"] {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Code Snippets & Badges */
+code, pre {
+  font-family: var(--font-mono) !important;
+}
+
+code:not(pre code) {
+  background: rgba(99, 102, 241, 0.18) !important;
+  color: #a5b4fc !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  font-size: 0.9em !important;
+}
+
+pre {
+  background: #0b1120 !important;
+  border: 1px solid var(--border-glass-bright) !important;
+  border-radius: 12px !important;
+  padding: 14px !important;
+}
+
+/* Blockquotes as Styled Callout Badges */
+blockquote {
+  border-left: 4px solid var(--accent-primary) !important;
+  background: rgba(99, 102, 241, 0.1) !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  margin: 10px 0 !important;
+  color: #e0e7ff !important;
+}
+
+/* InputComposer / Floating Message Input */
+div:has(> textarea),
+form:has(textarea),
+div[class*="inputComposer"] {
+  background: var(--bg-dark-surface) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid var(--border-glass-bright) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6) !important;
+  transition: all 0.3s ease !important;
+}
+
+div:has(> textarea):focus-within,
+form:has(textarea):focus-within {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 12px 35px -5px rgba(99, 102, 241, 0.3) !important;
+}
+
+textarea {
+  font-family: var(--font-primary) !important;
+  color: var(--text-main) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
