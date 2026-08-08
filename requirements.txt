@@ -1,4 +1,4 @@
 chainlit>=2.0.0
-google-genai>=2.14.0
-python-dotenv>=1.0.0
+huggingface_hub>=0.23.0
 pillow>=10.0.0
+python-dotenv>=1.0.0
