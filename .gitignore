@@ -16,4 +16,3 @@ Thumbs.db
 
 # Chainlit runtime / local files
 .files/
-.chainlit/
