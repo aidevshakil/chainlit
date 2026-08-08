@@ -95,7 +95,7 @@ reaction_on_message_received = false
 
 [UI]
 # Name of the assistant.
-name = "Assistant"
+name = "FLUX.1 AI Studio"
 
 # default_theme = "dark"
 
