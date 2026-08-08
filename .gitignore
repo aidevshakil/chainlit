@@ -1,0 +1,19 @@
+# Environment variables (contains secrets)
+.env
+.env.local
+.env.*.local
+
+# Python cache & bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Chainlit runtime / local files
+.files/
+.chainlit/

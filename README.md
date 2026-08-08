@@ -1,27 +1,6 @@
-# 🚀 Chainlit Conversational AI & Gemini Image Generator
+# ⚡ Chainlit FLUX.1-schnell Image Studio
 
-A conversational AI application built using **Chainlit** and **Google Gemini API** (`google-genai` SDK), featuring real-time chat streaming, AI image generation with **Imagen 3**, interactive action buttons, and visual step indicators.
-
----
-
-## 🎯 Task Objectives & Decorator Overview
-
-This application showcases the core architecture of Chainlit, specifically how **Python Decorators (`@`)** create an event-driven conversational web UI:
-
-1. **`@cl.on_chat_start`**: 
-   - Fires once when a user opens the chat UI session.
-   - Used for setting up the Gemini client, initializing session variables (`cl.user_session`), and rendering the welcome message & quick action buttons.
-
-2. **`@cl.on_message`**: 
-   - Fires every time a user submits a message in the chat input.
-   - Routes request between streaming conversational text (`gemini-2.5-flash`) and image generation (`imagen-3.0-generate-002`).
-
-3. **`@cl.action_callback`**: 
-   - Handles clicks on custom UI buttons (`cl.Action`).
-   - Enables interactive elements like preset prompts and aspect-ratio toggles.
-
-4. **`async with cl.step`**: 
-   - Context manager for visually rendering workflow steps, tool execution, or long-running tasks in the UI.
+A modern web application built using **Chainlit** and **Hugging Face Inference API** powered by **`black-forest-labs/FLUX.1-schnell`**, featuring high-speed AI image generation, interactive action buttons, aspect ratio toggles, and visual step indicators.
 
 ---
 
@@ -29,7 +8,7 @@ This application showcases the core architecture of Chainlit, specifically how *
 
 ### 1. Prerequisites
 - Python 3.10 or higher.
-- A free **Gemini API Key** from [Google AI Studio](https://aistudio.google.com/app/apikey).
+- A free **Hugging Face User Access Token** (`HF_TOKEN`) from [Hugging Face Settings](https://huggingface.co/settings/tokens).
 
 ### 2. Install Dependencies
 In your terminal, navigate to this project folder and run:
@@ -42,9 +21,9 @@ Create a `.env` file in the root directory (or copy `.env.example`):
 ```bash
 cp .env.example .env
 ```
-Open `.env` and insert your Gemini API Key:
+Open `.env` and insert your Hugging Face API token:
 ```env
-GEMINI_API_KEY=AIzaSy...your_actual_key_here
+HF_TOKEN=hf_your_actual_token_here
 ```
 
 ### 4. Launch the Chainlit App
@@ -58,11 +37,10 @@ Chainlit will automatically launch your default browser at: `http://localhost:80
 
 ## 🎨 How to Use the App
 
-- **Chat**: Type any prompt (e.g., *"Explain quantum computing in simple terms"*).
 - **Generate Images**:
-  - Type `/image <prompt>` (e.g., `/image a majestic lion wearing a golden crown in a lush forest`)
-  - Or type prompts containing keywords like *"generate an image of..."* or *"draw..."*
-  - Or click any of the preset buttons (**Cyberpunk City**, **AI Robot**, **Watercolor Sunset**).
+  - Type any prompt (e.g., *"A majestic lion wearing a golden crown in a lush forest"*)
+  - Or type `/image <prompt>` or `/draw <prompt>`
+  - Or click any preset button (**Cyberpunk City**, **3D AI Robot**, **Watercolor Sunset**, **Cosmic Nebula**).
 - **Toggle Aspect Ratio**: Click the `📐 Aspect Ratio` button to switch between `1:1` square images and `16:9` widescreen images.
 
 ---
@@ -71,8 +49,12 @@ Chainlit will automatically launch your default browser at: `http://localhost:80
 ```
 chainlit/
 ├── app.py                 # Main Chainlit application code
-├── requirements.txt       # Python dependencies
+├── requirements.txt       # Python dependencies (chainlit, huggingface_hub, pillow, python-dotenv)
+├── services/
+│   └── flux.py            # FLUX.1-schnell image generation service wrapper
 ├── .env.example           # Environment template
-├── README.md              # Project setup & documentation
-└── STREAMLIT_VS_CHAINLIT.md # Assignment writeup comparing Streamlit & Chainlit
+├── chainlit.md            # App landing UI banner
+├── public/                # Custom CSS styling
+│   └── custom.css
+└── README.md              # Project setup & documentation
 ```
