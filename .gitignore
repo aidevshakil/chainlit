@@ -1,6 +1,4 @@
 # Environment variables (contains secrets)
-.env
-.env.local
 .env.*.local
 
 # Python cache & bytecode
@@ -16,3 +14,9 @@ Thumbs.db
 
 # Chainlit runtime / local files
 .files/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+config.bat
+node_modules
