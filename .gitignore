@@ -5,7 +5,6 @@
 __pycache__/
 *.pyc
 *.pyo
-temp_auto_push.bat
 *.pyd
 .pytest_cache/
 
@@ -16,6 +15,8 @@ Thumbs.db
 # Chainlit runtime / local files
 .files/
 .gitignore
-branch_structure.json
-config.bat
 node_modules
+
+.env
+.env.*
+.vscode/
